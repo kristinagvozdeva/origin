@@ -1,7 +1,7 @@
 class Money
 {
 public:
-	Money() ;
+	Money();
 	Money(const long rubles, const unsigned char cents; ) ;
 	Money(const Money& other) ;
 	~Money();
