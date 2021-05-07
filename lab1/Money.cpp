@@ -2,12 +2,12 @@
 #include <iostream>
 
 Money::Money(const long rubles, const unsigned short cents)
-{	
-	setRubles(rubles);
-	setCents(cents);
+{
+	this->setRubles(rubles);
+	this->setCents(cents);
 }
 
-Money::Money(const Money& other) : cents(other.cents), rubles(other.rubles)
+Money::Money(const Money& other) : rubles(other.rubles), cents(other.cents)
 {
 }
 
@@ -25,12 +25,11 @@ unsigned short Money::getCents() const
 long Money::toCents() const
 {
 	if (getRubles() < 0) {
-		return this->getRubles() * CENTSINRUB - getCents();
+		return this->getRubles() * CENT_IN_RUB - getCents();
 	}
 	else {
-		return this->getRubles() * CENTSINRUB + getCents();
+		return this->getRubles() * CENT_IN_RUB + getCents();
 	}
-	
 }
 
 void Money::setRubles(long rubles)
@@ -40,62 +39,56 @@ void Money::setRubles(long rubles)
 
 void Money::setCents(unsigned short cents)
 {
-	if (cents < CENTSINRUB) {
+	if (cents < CENT_IN_RUB) {
 		this->cents = static_cast<unsigned char>(cents);
 	}
 	else {
-		this->cents = static_cast<unsigned char>(cents % CENTSINRUB);
+		this->cents = static_cast<unsigned char>(cents % CENT_IN_RUB);
 		if (getRubles() < 0) {
-			this->rubles -= long(cents / CENTSINRUB);
+			this->rubles -= long(cents / CENT_IN_RUB);
 		}
 		else {
-			this->rubles += cents / CENTSINRUB;
+			this->rubles += cents / CENT_IN_RUB;
 		}
 	}
 }
 
-Money& Money::addMoney(const Money& other) const
+Money Money::add(const Money& other) const
 {
-	const long coins = toCents() + other.toCents();	
-	const auto sum = new Money(coins / CENTSINRUB, abs(coins) % CENTSINRUB);
-	return *sum;
+   const auto  cents = this->cents + other.cents;
+   const auto  rubles = this->rubles + other.rubles;
+   return Money(rubles, cents);
 }
 
-Money& Money::subMoney(const Money& other) const
+Money Money::sub(const Money& other) const
 {
 	if (toCents() >= other.toCents()) {
 		const long coins = toCents() - other.toCents();
-		const auto sub = new Money(coins / CENTSINRUB, abs(coins) % CENTSINRUB);
-		return *sub;
+		return Money(coins / CENT_IN_RUB, abs(coins) % CENT_IN_RUB);
 	}
 	else
 	{
 		const long coins = other.toCents() - toCents();
-		const auto sub = new Money(-1 * coins / CENTSINRUB, abs(coins) % CENTSINRUB);
-		return *sub;
+		return Money(-1* coins / CENT_IN_RUB, abs(coins) % CENT_IN_RUB );
 	}
 }
 
-Money& Money::divMoney(const Money& other) const
+double Money::div(const Money& other) const
 {
-	const long coins = toCents() / abs(other.toCents()); //так как делим копейки, остатком пренебрегаем
-	const auto div = new Money(coins / CENTSINRUB, abs(coins) % CENTSINRUB);
-	return *div;
+	return double(toCents()) / double(other.toCents());
 }
 
-Money& Money::divByDouble(const double n) const
+Money Money::divByDouble(const double n) const
 {
-	const long coins = toCents() / n; //так как делим копейки, остатком пренебрегаем
-	const auto div = new Money(coins / CENTSINRUB, abs(coins) % CENTSINRUB);
-	return *div;
+	const long coins = toCents() / n;
+	return Money(coins / CENT_IN_RUB, abs(coins) % CENT_IN_RUB);
 }
 
-Money& Money::mulDouble(const double n) const
+Money Money::mulDouble(const double n) const
 {
-	
-	const long coins = toCents() * n; //так как умножаем копейки, остатком пренебрегаем
-	const auto mul = new Money(coins / CENTSINRUB, abs(coins) % CENTSINRUB);
-	return *mul;
+
+	const long coins = toCents() * n;
+	return Money(coins / CENT_IN_RUB, abs(coins) % CENT_IN_RUB);
 }
 
 bool Money::isEqual(const Money& other) const
@@ -112,15 +105,14 @@ std::istream& operator>>(std::istream& in, Money& m)
 {
 	long rubles;
 	unsigned short cents;
-	in >> rubles;
+	in >> rubles >> cents;
 	m.setRubles(rubles);
-	in >> cents;
 	m.setCents(cents);
 	return in;
 }
 
 std::ostream& operator<<(std::ostream& out, const Money& m)
-{	
+{
 	if (m.getCents() < 10) {
 		out << m.getRubles() << ",0" << m.getCents() << " RUB";
 	}
