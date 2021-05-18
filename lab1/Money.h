@@ -13,14 +13,12 @@
 class Money
 {
 
+
 public:
 	/**
 	 * \brief параметризованный конструктор со значениями по умолчанию
 	 */
 	Money(const long rubles=0, const unsigned short cents=0);
-
-
-
 	/**
 	 * \brief конструктор копирования
 	 */
@@ -103,8 +101,7 @@ private:
 
 	long rubles;								// рубли
 	unsigned char cents;						// копейки
-	const unsigned short CENT_IN_RUB = 100;		// копеек в рубле
-
+    const unsigned short CENT_IN_RUB = 100;		// копеек в рубле
 	/**
 	 * \brief метод перевода всей денежной величины в копейки
 	 * \return копейки
