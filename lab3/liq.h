@@ -8,11 +8,14 @@ protected:
 
 	std::string name;
 	float density;
-
+    static constexpr int MIN_DENSITY = 700;
+    static constexpr int MAX_DENSITY = 1360;
+    static constexpr int MAX_CONCENTRATION = 100;
+    static constexpr int MIN_CONCENTRATION = 0;
 	/**
 	 * \brief Метод проверки допустимости значений Плотность жидкостей (диапазон 700-1360 кг/м3)
 	 */
-	bool correct_density(const float density);
+	bool correct_density(const float density) const;
 
 	/**
 	 * \brief Сеттер поля name
@@ -28,7 +31,7 @@ public:
 	/**
 	 * \brief Конструктор по умолчанию
 	 */
-	Liquid() = default;
+	Liquid();
 
 	/**
 	 * \brief Параметризованный конструктор
@@ -53,8 +56,8 @@ public:
 	/**
 	 * \brief Геттер поля density
 	 */
-	float get_density() const;	
-	
+	float get_density() const;
+
 	/**
 	 * \brief Метод переназначения плотности
 	 */
@@ -85,7 +88,7 @@ private:
 	 * \brief Метод проверки допустимости значений крепости - концентрация спирта в объеме. Т. Е. его процентное содержание (диапазон от 0 до 10)
 	 */
 	bool correct_n(const float n) const;
-	
+
 	/**
 	 * \brief Сеттер поля n
 	 */
@@ -115,7 +118,7 @@ public:
 	/**
 	 * \brief Геттер поля n
 	 */
-	float get_n() const;	
+	float get_n() const;
 
 	/**
 	 * \brief Метод переназначения концентрации

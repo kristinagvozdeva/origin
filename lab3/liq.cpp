@@ -1,24 +1,22 @@
-#pragma once;
 #include <iostream>
 #include <sstream>
 #include "liq.h"
 
 std::string toString(float& r) {
-
 	std::ostringstream ost;
-
 	ost << r;
-
 	return ost.str();
-
 }
 
-bool Liquid::correct_density(float density){
-	if (density >= 700 && density <= 1360)
+bool Liquid::correct_density(float density) const{
+	if (density >= MIN_DENSITY && density <= MAX_DENSITY)
 		return 0;
 	else
 		return 1;
 }
+
+Liquid::Liquid()
+{}
 
 Liquid::Liquid(const std::string name, const float density) {
 	if (correct_density(density))
@@ -97,7 +95,7 @@ std::ostream& operator<<(std::ostream& out, const Alcohol& a)
 
 bool Alcohol::correct_n(const float n) const
 {
-	if (n >= 0 && n <= 100)
+	if (n >= MIN_CONCENTRATION && n <= MAX_CONCENTRATION)
 		return 0;
 	else
 		return 1;
